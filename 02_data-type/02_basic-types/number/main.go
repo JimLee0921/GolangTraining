@@ -2,11 +2,8 @@ package main
 
 import "fmt"
 
-// main 演示 Go 常见的基本数据类型以及它们的使用方式
+// main 演示 Go 常见的数值数据类型
 func main() {
-	// 布尔型：只有 true 和 false 两个取值，经常用于条件判断
-	fmt.Printf("布尔值 isReady: %t，类型: %T\n", true, false)
-
 	/*
 		整数：
 			有符号：int8, int16, int32, int64, int（跟平台相关，通常 32/64 位）
@@ -33,14 +30,4 @@ func main() {
 	var ascii byte = 'A'
 	fmt.Printf("rune letter: %c，Unicode: %U，类型: %T\n", letter, letter, letter)
 	fmt.Printf("byte ascii: %c，数值: %d，类型: %T\n", ascii, ascii, ascii)
-
-	/*
-		字符串：由 UTF-8 字节序列组成
-		可以使用 len 函数计算其字节长度
-		创建后不可变：一旦创建，内部的字节序列不能被改变。只能让变量指向一个新的字符串值
-	*/
-	greeting := "你好，Gopher"
-	greeting = "yesyesyes"
-	fmt.Printf("字符串 greeting: %q，字节长度: %d，类型: %T\n", greeting, len(greeting), greeting)
-
 }

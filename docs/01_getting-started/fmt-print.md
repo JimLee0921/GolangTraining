@@ -1,8 +1,6 @@
-# Hello Go
+# fmt 输出相关
 
-## fmt 输出相关
-
-### Go `fmt` 打印函数
+## Go `fmt` 打印函数
 
 一共有三种 Print 函数 `Print`、`Sprint` 和 `Fprint`
 
@@ -18,10 +16,10 @@
 |            | `Fprintln` | 写入到 `io.Writer`，带空格和换行    | `fmt.Fprintln(file, name, n)` → 文件中写入 `Gopher 42\n`       |
 |            | `Fprintf`  | **格式化**后写入 `io.Writer`    | `fmt.Fprintf(file, "%s-%d", name, n)` → 文件中写入 `Gopher-42` |
 
-### Go 常用格式化动词
+## Go 常用格式化动词
 
 下面为 fmt `printf`
-函数常用格式化动词。使用案例见 [format-verbs/main.go](../01_getting-started/03_print-functions/format-verbs/main.go)。
+函数常用格式化动词。使用案例见 [format-verbs/main.go](../../01_getting-started/02_print-functions/format-verbs/main.go)。
 
 | 类别      | 动词     | 说明                         | 示例输出                   |
 |---------|--------|----------------------------|------------------------|
