@@ -1,7 +1,5 @@
 package main
 
-import "fmt"
-
 func classifyStatusRange(code int) string {
 	switch {
 	case code >= 100 && code < 200:
@@ -21,8 +19,9 @@ func classifyStatusRange(code int) string {
 
 // main HTTP 状态码判断返回信息
 func main() {
-	fmt.Println(classifyStatusRange(200))
-	fmt.Println(classifyStatusRange(302))
-	fmt.Println(classifyStatusRange(500))
+	codes := []int{100, 204, 302, 404, 500, 700}
+	for _, c := range codes {
+		println(c, classifyStatusRange(c))
+	}
 
 }
