@@ -2,6 +2,8 @@
 
 Go 对数值类型主要分为 整数类型、浮点类型 和 复数类型
 
+> 具体代码见 [number/main.go](../../../02_data-type/02_basic-types/number/main.go)
+
 ## 整数类型（Integers）
 
 整数类型又分为 **有符号整数** 和 **无符号整数**：
@@ -138,6 +140,4 @@ var i int32 = 100
 var j int64 = int64(i) // 必须显式转换
 ```
 
-## 使用案例
 
-> 见 [number/main.go](../../../02_data-type/02_basic-types/number/main.go)

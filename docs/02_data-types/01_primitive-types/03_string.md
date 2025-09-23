@@ -1,6 +1,6 @@
 # 字符串
 
----
+> 具体代码见 [string/main.go](../../../02_data-type/02_basic-types/string/main.go)
 
 ## 基本介绍
 

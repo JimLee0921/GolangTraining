@@ -1,5 +1,7 @@
 # 布尔类型
 
+> 具体代码见 [boolean/main.go](../../../02_data-type/02_basic-types/boolean/main.go)
+
 ## 核心概念
 
 - 在 Go 中，布尔类型使用关键字 bool 表示
@@ -25,5 +27,5 @@
 
 ## 实用示例
 
-> 见 [boolean/main.go](../../../02_data-type/02_basic-types/boolean/main.go)
+
 

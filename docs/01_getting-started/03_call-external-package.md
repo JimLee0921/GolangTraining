@@ -1,8 +1,8 @@
-## 引用外部包代码
+# 引用外部包代码
 
----
+> 具体代码见：[引用外部包](../../01_getting-started/01_tutorial/02_call-external-package/main.go)
 
-### 调用外部模块
+## 调用外部模块
 
 * 通过 import "rsc.io/quote" 声明要用外部模块。
 * 直接调用 quote.Go() 函数。
@@ -20,7 +20,7 @@ func main() {
 }
 ```
 
-### 下载依赖
+## 下载依赖
 
 * 下载 rsc.io/quote 及其依赖（例如 rsc.io/sampler、golang.org/x/text）
 * 把依赖和版本写入 go.mod
@@ -30,7 +30,7 @@ func main() {
 go mod tidy
 ```
 
-### 运行
+## 运行
 
 ```bash
 go mod run .
