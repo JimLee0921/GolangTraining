@@ -87,4 +87,6 @@
 * UTF-8 编码下，一个中文占 3 个字节。
 * 遍历字符串时最好用 `for range`，保证不会拆坏 Unicode 字符（如果使用 `for index` 在存在中文的情况下遍历的还是字节而不是字符）
 * 常见操作都在 `strings` 包和 `strconv` 包里。 见 [string/main.go](../../../02_data-type/02_basic-types/string/main.go)
-
+* `string(i)` 会把整数 i 当成 Unicode 码点 转成对应的字符（rune -> UTF-8 字节序列 -> string）
+* []rune(str) 可以把字符串解析成一组 Unicode 码点
+* []byte(str) 则把字符串拆成 UTF-8 字节
