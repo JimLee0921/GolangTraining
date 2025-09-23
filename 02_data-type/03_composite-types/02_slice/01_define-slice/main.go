@@ -42,12 +42,12 @@ func main() {
 	buffered = append(buffered, 10, 20, 30)
 	fmt.Printf("buffered: %#v | len=%d cap=%d\n", buffered, len(buffered), cap(buffered))
 
-	// 方式六：通过数组切片获得视图，共享底层存储
+	// 方式五：通过数组切片获得视图，共享底层存储
 	source := [5]int{1, 2, 3, 4, 5}
 	window := source[1:4]
 	fmt.Printf("window: %#v | len=%d cap=%d\n", window, len(window), cap(window))
 
-	// 方式七：构造切片的切片，用于表示二维结构
+	// 方式六：构造切片的切片，用于表示二维结构
 	matrix := [][]int{
 		{1, 2, 3},
 		{4, 5, 6},
