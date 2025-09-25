@@ -5,11 +5,12 @@ import "fmt"
 // main 演示 Go 中几种常见的变量声明方式。
 func main() {
 	/*
-	   变量命名规范（包的可用是强制性）：
-	   1. 函数内部使用小驼峰命名相当于 private，例如 userName、totalCount hidden （只能在本包内用）
-	   2. 需要导出的包级变量或常量首字母大写相当于 public，例如 ExportedValue、 Visible（其他包可访问）
-	   3. 避免以下划线开头，保持命名语义清晰
-	   4. 缩写保持整体大写，例如 HTTPServer，而不是 HttpServer
+		变量命名规范（包的可用是强制性）：
+		1. 函数内部使用小驼峰命名相当于 private，例如 userName、totalCount hidden （只能在本包内用）
+		2. 需要导出的包级变量或常量首字母大写相当于 public，例如 ExportedValue、 Visible（其他包可访问）
+		3. 避免以下划线开头，保持命名语义清晰
+		4. 缩写保持整体大写，例如 HTTPServer，而不是 HttpServer
+		5. 任何时候，如果一个变量被创建并初始化为零值，按照 Go 的习惯用法（idiomatic Go），推荐使用 var 关键字
 	*/
 	// 方式一：使用 var 指定类型，未赋值时会得到该类型的零值
 	var count int
