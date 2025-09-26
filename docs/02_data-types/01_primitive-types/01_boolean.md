@@ -1,6 +1,6 @@
 # 布尔类型
 
-> 具体代码见 [boolean](../../../02_data-type/02_basic-types/boolean/)
+> 具体代码见 [boolean](../../../02_data-type/05_basic-types/01_boolean/)
 
 ## 核心概念
 

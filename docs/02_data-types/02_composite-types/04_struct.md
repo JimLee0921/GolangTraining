@@ -1,6 +1,6 @@
 ﻿# 结构体 Struct
 
-> 具体代码见：[struct结构体](../../../02_data-type/03_composite-types/04_struct)
+> 具体代码见：[struct结构体](../../../02_data-type/06_composite-types/04_struct)
 
 ## 定义
 

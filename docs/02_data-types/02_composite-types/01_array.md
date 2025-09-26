@@ -1,6 +1,6 @@
 ﻿# 数组 array
 
-> 具体代码见：[array数组](../../../02_data-type/03_composite-types/01_array)
+> 具体代码见：[array数组](../../../02_data-type/06_composite-types/01_array)
 
 ## 核心概念
 

@@ -2,7 +2,7 @@
 
 Go 对数值类型主要分为 整数类型、浮点类型 和 复数类型
 
-> 具体代码见 [number/main.go](../../../02_data-type/02_basic-types/number/main.go)
+> 具体代码见 [number/main.go](../../../02_data-type/05_basic-types/02_number/main.go)
 
 ## 整数类型（Integers）
 

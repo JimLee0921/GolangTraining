@@ -1,6 +1,6 @@
 ﻿# 映射 map
 
-> 具体代码见：[map映射](../../../02_data-type/03_composite-types/03_map)
+> 具体代码见：[map映射](../../../02_data-type/06_composite-types/03_map)
 
 ## 基础概念
 

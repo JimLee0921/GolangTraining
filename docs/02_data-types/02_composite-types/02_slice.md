@@ -1,6 +1,6 @@
 ﻿# 切片 slice
 
-> 具体代码见：[slice切片](../../../02_data-type/03_composite-types/02_slice)
+> 具体代码见：[slice切片](../../../02_data-type/06_composite-types/02_slice)
 
 ## 核心概念
 
@@ -87,4 +87,4 @@ fmt.Println(idx, val)
 - 多协程访问时注意同步，避免在未锁定的情况下同时 `append` 或修改
 - 切片可用于实现栈、队列、窗口等结构，灵活组合即可满足多数动态容器需求
 - `slices`
-  包中有很多更方便的切片方法可以参考 [slices-package-example](../../../02_data-type/03_composite-types/02_slice/03_slices-package-example)
+  包中有很多更方便的切片方法可以参考 [slices-package-example](../../../02_data-type/06_composite-types/02_slice/03_slices-package-example)
