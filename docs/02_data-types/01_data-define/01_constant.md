@@ -1,5 +1,7 @@
 # Go 常量
 
+> 具体代码见：[constants常量](../../../02_data-type/02_constants)
+
 ## 基本概念
 
 - 使用 `const` 定义常量。

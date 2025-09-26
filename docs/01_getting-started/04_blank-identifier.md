@@ -1,5 +1,7 @@
 # Go 空白标识符 `_`
 
+> 具体代码见：[blank identifier空白标识符](../../01_getting-started/01_tutorial/04_blank-identifier)
+
 ## 1. 基本概念
 
 * `_` 叫 **空白标识符 (blank identifier)**。
