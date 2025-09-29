@@ -46,4 +46,5 @@ func Add(a, b int) int { return a + b }
 		所以需要先指定路径，再加 -bench或者先加 -bench，再指定路径（注意 -bench 后面要有值）
 		go test -v ./06_testing/03_benchmark-test -bench=.
 		go test -v -bench=. ./06_testing/03_benchmark-test
+	benchmark 中有个 b.N 属性，如果该用例能够在 1s 内完成，b.N 的值便会增加，再次执行。b.N 的值大概以 1, 2, 3, 5, 10, 20, 30, 50, 100 这样的序列递增，越到后面，增加得越快
 */
