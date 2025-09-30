@@ -15,8 +15,8 @@ func main() {
 			在并发程序里，多个 goroutine / 线程 同时访问和修改同一个资源（变量、文件、网络连接等），而访问顺序和执行时间不确定，最终结果也就变得不可预测
 			通俗点说：大家同时去抢一个东西，但没有人管秩序，谁先谁后不确定，最后就乱套了
 		解决方案主要有三种：
-			1. 用互斥锁 (sync.Mutex)
-			2. 用原子操作 (sync/atomic)
+			1. 用互斥锁 (sync.Mutex)，适合逻辑较复杂情况
+			2. 用原子操作 (sync/atomic)，适合逻辑较简单情况
 			3. 用 channel 传递数据（Go 推崇的方式，避免多个 goroutine 共享可变状态）
 		可以使用 go run 命令查看是否存在资源竞争（Go 的 race detector 底层依赖 C 代码（需要 cgo 支持）默认情况下，Windows 下安装的 Go 有时会把 CGO_ENABLED=0，导致 -race 用不了）
 		go run main.go：

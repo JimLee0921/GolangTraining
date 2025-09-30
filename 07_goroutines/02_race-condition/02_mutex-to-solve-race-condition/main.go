@@ -15,6 +15,18 @@ var (
 func main() {
 	/*
 		加锁解决资源竞争问题
+		mu := sync.Mutex
+			互斥量 (mutual exclusion)保证同一时刻只有一个 goroutine 能进入临界区（共享资源的访问代码块）
+			mu.Lock()   // 上锁
+			// 临界区：安全地访问或修改共享变量
+			mu.Unlock() // 解锁
+		注意事项：
+			1. 成对出现：Lock() 和 Unlock() 必须配对，否则容易死锁
+			2. 锁的粒度：锁的范围不要太大，否则会降低并发度
+				粒度太小：保护不住数据，还是有竞争
+				粒度太大：整个程序都被串行化，失去并发意义
+			3. 避免重复上锁：同一个 goroutine 如果在解锁前再次 Lock()，会死锁
+
 	*/
 	wg.Add(3)
 	go withdraw("JimLee", 600)
