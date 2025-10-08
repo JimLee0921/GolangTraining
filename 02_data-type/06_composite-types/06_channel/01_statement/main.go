@@ -40,8 +40,8 @@ func main() {
 			在函数参数或变量中，可以限制 channel 的方向
 			var sendOnly chan<- int   // 只能发送 int
 			var recvOnly <-chan int   // 只能接收 int
-				chan<- T：只写通道，只能执行 ch <- v
-				<-chan T：只读通道，只能执行 v := <-ch
+				chan<- T：只发送通道，单向通道，只能用来发送（<- 放在 chan 右侧），只能执行 ch <- v
+				<-chan T：只接收通道，单向通道，只能用来接收（<- 放在 chan 左侧），只能执行 v := <-ch
 				普通 chan T 是双向的，可以传给只写或只读，但反过来不行
 		注意事项：
 			var 声明的 channel 默认值是 nil
