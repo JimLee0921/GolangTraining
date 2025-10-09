@@ -70,8 +70,8 @@ func mergeAnother(cs ...<-chan int) <-chan int {
 	// 把 goroutine 体提取成 output 内联函数
 	var wg sync.WaitGroup
 	out := make(chan int)
-	// 为 cs 中的每个输入通道启动一个输出 goroutine。
-	// 输出将值从 c 复制到 out，直到 c 关闭，然后调用 wg.Done。
+	// 为 cs 中的每个输入通道启动一个输出 goroutine
+	// 输出将值从 c 复制到 out，直到 c 关闭，然后调用 wg.Done
 	output := func(c <-chan int) {
 		for n := range c {
 			out <- n
