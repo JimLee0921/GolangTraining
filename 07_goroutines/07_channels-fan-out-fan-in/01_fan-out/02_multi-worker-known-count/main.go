@@ -19,6 +19,10 @@ func main() {
 		关闭 out 的小技巧：单独起个收尾协程
 		思路：当 in 关闭且所有 worker 都跑到结尾，out 也可以关
 		这里先用已知任务数的方式，简单一点
+		多个 goroutine 共同从 同一个 in 读，就是 fan-out 的本质
+		结果无序，谁先算完谁先写
+		这里先用“已知数量 jobs 来收尾
+		真正使用还是需要用 WaitGroup
 	*/
 	in := make(chan int)
 	out := make(chan int)

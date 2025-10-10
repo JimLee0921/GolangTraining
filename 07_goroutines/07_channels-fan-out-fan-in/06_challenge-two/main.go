@@ -79,7 +79,7 @@ func merge(cs ...<-chan int) <-chan int {
 	for _, c := range cs {
 		go output(c)
 	}
-
+	// 启动一个 Goroutine，在所有输出 Goroutine 完成后关闭，此 Goroutine 必须在 wg.Add 调用之后启动
 	go func() {
 		wg.Wait()
 		close(out)

@@ -1,46 +1,51 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+)
 
-// main pipeline
+// stage: 生成 0..n-1
+func gen(n int) <-chan int {
+	out := make(chan int)
+	go func() {
+		defer close(out)
+		for i := 0; i < n; i++ {
+			out <- i
+		}
+	}()
+	return out
+}
+
+// stage: 计算平方
+func square(in <-chan int) <-chan int {
+	out := make(chan int)
+	go func() {
+		defer close(out)
+		for v := range in {
+			out <- v * v
+		}
+	}()
+	return out
+}
+
+// stage: 转字符串
+func toString(in <-chan int) <-chan string {
+	out := make(chan string)
+	go func() {
+		defer close(out)
+		for v := range in {
+			out <- fmt.Sprintf("val=%d", v)
+		}
+	}()
+	return out
+}
+
 func main() {
-	// 生成 channel
-	//c := genChannel(2, 3)
-	//res := square(c)
-	//for i := range res {
-	//	fmt.Println(i) // 4 9
-	//}
+	nums := gen(1000)
+	sq := square(nums)
+	strs := toString(sq)
 
-	// 简写
-	for i := range square(genChannel(2, 3, 4, 5, 6, 7, 8, 9)) {
-		fmt.Println(i)
+	for s := range strs {
+		fmt.Println(s)
 	}
-}
-
-func genChannel(nums ...int) <-chan int {
-	/*
-		返回传入的整数生成的channel
-	*/
-	out := make(chan int)
-	go func() {
-		defer close(out)
-		for _, n := range nums {
-			out <- n
-		}
-	}()
-	return out
-}
-
-func square(c <-chan int) <-chan int {
-	/*
-		传入 channel 计算里面每一个数字的平方并插入新的 channel 最终返回
-	*/
-	out := make(chan int)
-	go func() {
-		defer close(out)
-		for i := range c {
-			out <- i * i
-		}
-	}()
-	return out
 }

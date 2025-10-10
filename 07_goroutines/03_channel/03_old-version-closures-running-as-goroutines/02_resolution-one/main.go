@@ -3,6 +3,9 @@ package main
 import "fmt"
 
 func main() {
+	/*
+		第一种解决方案是把循环变量作为参数显式传入
+	*/
 	done := make(chan bool)
 
 	values := []string{"a", "b", "c"}

@@ -1,45 +1,90 @@
 package main
 
-import "fmt"
+import (
+	"context"
+	"fmt"
+	"time"
+)
 
-func main() {
-	// pipeline 模式计算一百个数的阶乘
-	res := factorialChannel(genSource())
-	for i := range res {
-		fmt.Println(i)
-	}
-}
-
-func genSource() <-chan int {
-	// 生成数据源管道
+func gen(ctx context.Context, n int) <-chan int {
 	out := make(chan int)
 	go func() {
 		defer close(out)
-		for i := 0; i < 10; i++ {
-			for j := 3; j < 13; j++ {
-				out <- j
+		for i := 0; i < n; i++ {
+			select {
+			case out <- i:
+			case <-ctx.Done():
+				return
 			}
 		}
 	}()
 	return out
 }
 
-func factorialChannel(c <-chan int) <-chan int {
-	// 计算数据源管道中每一个数的阶乘并保存到新的管道返回
+func square(ctx context.Context, in <-chan int) <-chan int {
 	out := make(chan int)
 	go func() {
 		defer close(out)
-		for i := range c {
-			out <- factorial(i)
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case v, ok := <-in:
+				if !ok {
+					return
+				}
+				// 写也要可取消
+				select {
+				case out <- v * v:
+				case <-ctx.Done():
+					return
+				}
+			}
 		}
 	}()
 	return out
 }
 
-func factorial(n int) int {
-	total := 1
-	for i := n; i > 0; i-- {
-		total *= i
+func toString(ctx context.Context, in <-chan int) <-chan string {
+	out := make(chan string)
+	go func() {
+		defer close(out)
+		for {
+			select {
+			case <-ctx.Done():
+				return
+			case v, ok := <-in:
+				if !ok {
+					return
+				}
+				s := fmt.Sprintf("val=%d", v)
+				select {
+				case out <- s:
+				case <-ctx.Done():
+					return
+				}
+			}
+		}
+	}()
+	return out
+}
+
+// main 加上上下文取消机制
+func main() {
+	/*
+		在每个 stage 的读/写处监听 ctx.Done()
+		上游或外部取消时，所有 goroutine 都能及时退出，防泄露
+		生成的 nums 管道数量多但是只给 30ms 耗时，所以不能完成，但是正常退出
+	*/
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Millisecond)
+	defer cancel()
+
+	nums := gen(ctx, 10000)
+	sq := square(ctx, nums)
+	strs := toString(ctx, sq)
+
+	for s := range strs {
+		fmt.Println(s)
 	}
-	return total
+	// 到 300ms 时，ctx 超时，全部 stage 连锁退出。
 }

@@ -1,13 +1,13 @@
-## Select 语法
+## Select
 
 在 Go 并发编程里：
 
-* **channel** 用来在 goroutine 之间传递数据；
-* **select** 用来同时监听多个 channel 的读写操作，从而实现 **多路复用**（类似网络编程里的 `select`/`poll`/`epoll`）。
+* **channel** 用来在 goroutine 之间传递数据
+* **select** 用来同时监听多个 channel 的读写操作，从而实现 **多路复用**（类似网络编程里的 `select`/`poll`/`epoll`）
 
 ---
 
-### `select` 的基本语法
+## 基本语法
 
 ```go
 select {
@@ -31,8 +31,8 @@ fmt.Println("没有可用的 channel 操作")
 
 ## 使用场景总结
 
-* **同时等待多个通道**：处理最快返回的结果；
-* **实现超时控制**：配合 `time.After`；
-* **非阻塞尝试**：配合 `default` 分支；
-* **优雅退出**：配合 `context.Done()` 来监听取消信号。
+* **同时等待多个通道**：处理最快返回的结果
+* **实现超时控制**：配合 `time.After`
+* **非阻塞尝试**：配合 `default` 分支
+* **优雅退出**：配合 `context.Done()` 来监听取消信号
 
