@@ -1,0 +1,1 @@
+package _5_atomic_value_snapshot

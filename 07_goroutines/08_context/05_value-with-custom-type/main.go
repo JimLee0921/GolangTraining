@@ -1,0 +1,1 @@
+package _5_value_with_custom_type
