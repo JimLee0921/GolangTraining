@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+)
 
 // main if支持初始化语句
 func main() {
@@ -14,7 +17,7 @@ func main() {
 			条件为 false 执行
 		}
 	*/
-	if adminMessage, userMessage, isAdmin := "欢迎管理员", "欢迎用户", false; isAdmin {
+	if adminMessage, userMessage, isAdmin := "欢迎管理员", "欢迎用户", rand.Intn(2) == 0; isAdmin {
 		fmt.Println(adminMessage)
 	} else {
 		fmt.Println(userMessage)

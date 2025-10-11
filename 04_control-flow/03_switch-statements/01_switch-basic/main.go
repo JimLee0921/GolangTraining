@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+)
 
 // main switch 语句基础写法
 func main() {
@@ -39,7 +42,8 @@ func main() {
 	}
 
 	// 省略 条件，每个 case 后必须是 bool 表达式
-	age := 55
+	age := rand.Intn(101)
+	fmt.Println("age:", age)
 	switch {
 	case age < 18:
 		fmt.Println("未成年")

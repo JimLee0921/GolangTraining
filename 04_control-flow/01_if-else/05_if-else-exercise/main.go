@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand/v2"
+)
 
 // main if-else 模拟登陆系统练习
 func main() {
@@ -9,7 +12,13 @@ func main() {
 		"tom":   "r3s2",
 		"rose":  "fek32",
 	}
-	username := "tom"
+	var username string
+	if rand.IntN(2) == 0 {
+		username = "tom"
+	} else {
+		username = "admin"
+	}
+	fmt.Println(username)
 	password := "r3s2"
 	// 使用初始化语句查询用户名是否存在
 	if realPwd, ok := users[username]; ok {

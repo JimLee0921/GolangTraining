@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand"
+)
 
 // main if-else_if-else编写多个分支
 func main() {
@@ -15,13 +18,13 @@ func main() {
 			// 当上面所有条件都为 false 时执行
 		}
 	*/
-
-	score := 89
+	score := rand.Intn(101)
+	fmt.Println("score:", score)
 	if score < 50 {
 		fmt.Println("不及格")
-	} else if score >= 50 && score < 80 {
+	} else if score < 80 {
 		fmt.Println("及格")
-	} else if score >= 80 && score < 90 {
+	} else if score < 90 {
 		fmt.Println("优秀")
 	} else {
 		fmt.Println("NB")

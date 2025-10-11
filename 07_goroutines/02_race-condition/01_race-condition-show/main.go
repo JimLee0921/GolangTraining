@@ -11,13 +11,7 @@ var balance = 1000 // 银行账户余额
 
 func main() {
 	/*
-		race condition（资源竞争）：资源竞争指的是：
-
-		解决方案主要有三种：
-			1.
-			2. 用原子操作 (sync/atomic)，适合逻辑较简单情况
-			3. 用 channel 传递数据（Go 推崇的方式，避免多个 goroutine 共享可变状态）
-
+		race condition（资源竞争）
 	*/
 	// 展示资源竞争
 	wg.Add(2)
@@ -52,33 +46,5 @@ func withdraw(name string, amount int) {
 
 
 race 检测输出
-	PS C:\demo\GolangTraining> go run -race .\07_goroutines\02_race-condition\01_race-condition-show\main.go
-	JimLee 正在取钱: 800. 当前余额: 1000
-	BruceLee 正在取钱: 500. 当前余额: 1000
-	JimLee 取钱成功，取出: 800，剩余余额: 200
-	==================
-	WARNING: DATA RACE
-	Read at 0x00014011b208 by goroutine 9:
-	  main.withdraw()
-		  C:/demo/GolangTraining/07_goroutines/02_race-condition/01_race-condition-show/main.go:48 +0x1fa
-	  main.main.gowrap2()
-		  C:/demo/GolangTraining/07_goroutines/02_race-condition/01_race-condition-show/main.go:37 +0x3a
-
-	Previous write at 0x00014011b208 by goroutine 8:
-	  main.withdraw()
-		  C:/demo/GolangTraining/07_goroutines/02_race-condition/01_race-condition-show/main.go:48 +0x212
-	  main.main.gowrap1()
-		  C:/demo/GolangTraining/07_goroutines/02_race-condition/01_race-condition-show/main.go:36 +0x3a
-
-	Goroutine 9 (running) created at:
-	  main.main()
-		  C:/demo/GolangTraining/07_goroutines/02_race-condition/01_race-condition-show/main.go:37 +0x44
-
-	Goroutine 8 (finished) created at:
-	  main.main()
-		  C:/demo/GolangTraining/07_goroutines/02_race-condition/01_race-condition-show/main.go:36 +0x38
-	==================
-	BruceLee 取钱成功，取出: 500，剩余余额: -300
-	最终余额为: -300Found 1 data race(s)s
-	exit status 66
+	go run -race main.go
 */

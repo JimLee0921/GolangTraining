@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"math/rand/v2"
+)
 
 // main if-else 分支基础练习
 func main() {
@@ -12,9 +15,7 @@ func main() {
 				// 当条件为 false 时执行
 			}
 	*/
-
-	isAdmin := true
-
+	isAdmin := rand.IntN(2) == 0 // 返回 0 或 1，50% 概率为 true
 	if isAdmin {
 		fmt.Println("用户是管理员")
 	} else {
