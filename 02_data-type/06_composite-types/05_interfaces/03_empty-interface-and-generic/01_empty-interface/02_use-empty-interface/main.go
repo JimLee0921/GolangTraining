@@ -31,17 +31,7 @@ type boat struct {
 // main 使用空接口
 func main() {
 	/*
-		空接口
-			空接口就是不包含任何方法的接口，因为接口的本质就是类型必须实现接口中的所有方法
-			而空接口没有方法，所以所有类型都自动实现了它，也就是实现了多态
-			在 Go 中，空接口可以表示 任意类型
-		使用场景
-			1. 任意类型的值（作为函数参数）
-			2. 任意类型的集合（切片等）
-			3. 从空接口取值（类型断言）
-		Go 1.18 引入了泛型，并且官方给空接口起了一个新别名：type any = interface{}
-		any 和 interface{} 是等价的，只是语义更直观：表示任意类型。
-
+		Go 1.18 后并且官方给空接口起了一个新别名：type any = interface{}
 	*/
 
 	car1 := car{vehicle: vehicle{Seats: 4, MaxSpeed: 180, Color: "Red"}, Wheels: 4, Doors: 4}
