@@ -4,7 +4,7 @@
 >
 > [内存地址与指针](../../../02_data-type/03_memory-address-and-pointer)
 >
-> [函数指针传递](../../../05_functions/09_passing-pointer)
+> [函数指针传递](../../../05_functions/07_passing-pointer)
 
 ## 1. 核心概念
 

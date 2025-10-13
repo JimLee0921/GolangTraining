@@ -57,7 +57,7 @@ Go 支持 可变参数（类似 Python 的 *args 或 Java 的 ...），可变参
 - param（形参）：写成 `*T`，例如 `*int`、`*string`，`*`（解引用运算符操作地址）
 - arg（实参）：调用时传入 &变量，&(取地址符)
 
-> 更详细讲解见 [passing-pointer](../09_passing-pointer)
+> 更详细讲解见 [passing-pointer](../07_passing-pointer)
 
 ### 函数作为参数 / 返回值
 

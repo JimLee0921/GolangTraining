@@ -2,7 +2,6 @@ package main
 
 import "fmt"
 
-// main 方法不返回任何内容
 func main() {
 	/*
 		Go 中函数如果不需要返回值，直接省略返回值类型即可
@@ -16,6 +15,7 @@ func main() {
 
 }
 
+// greeting 方法不返回任何内容
 func greeting(name string, print bool) {
 	if !print {
 		return // 直接结束
