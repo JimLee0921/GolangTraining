@@ -12,7 +12,7 @@ func main() {
 	fmt.Println(numberArray[2])
 
 	// 2. 使用 len 获取数组长度
-	fmt.Printf("stringArray的长度为: %d\n", len(stringArray))
+	fmt.Printf("stringArray length: %d\n", len(stringArray))
 
 	// 3. 通过下标修改数组的某一个值
 	numberArray[5] = 123
@@ -20,9 +20,9 @@ func main() {
 
 	// 4. 遍历数组：用 for 循环或 for ... range
 	for i := 0; i < len(stringArray); i++ {
-		fmt.Printf("stringArray的第 %d 个值为: %v\n", i+1, stringArray[i])
+		fmt.Printf("stringArray index %d: %v\n", i+1, stringArray[i])
 	}
-	// 可配合 break
+	// 5. 使用 for range 返回  index 和 value 可以使用 _, value 忽略索引
 	for i, v := range numberArray {
 		fmt.Printf("numberArray[%d]: %v\n", i, v)
 		if i > 6 {
