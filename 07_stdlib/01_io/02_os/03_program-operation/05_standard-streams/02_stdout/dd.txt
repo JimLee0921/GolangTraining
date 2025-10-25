@@ -1,0 +1,4 @@
+This goes to standard output
+This goes to standard output
+Hello
+Brother

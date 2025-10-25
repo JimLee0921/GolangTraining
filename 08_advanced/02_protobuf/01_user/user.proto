@@ -1,0 +1,27 @@
+syntax = "proto3";  // 使用 proto3 语法
+
+package example;    // 包名，防止命名冲突
+
+option go_package = "pb/"; // Go 包路径，它的设置关乎生成go文件后存放的路径
+
+// 定义一个枚举
+enum Role {
+  USER = 0;
+  ADMIN = 1;
+}
+
+// 嵌套结构
+message Profile {
+  string email = 1;
+  string phone = 2;
+}
+
+// 主结构
+message User {
+  int32 id = 1;
+  string name = 2;
+  Role role = 3;
+  bool is_active = 4;
+  repeated string tags = 5;
+  Profile profile = 6;
+}
