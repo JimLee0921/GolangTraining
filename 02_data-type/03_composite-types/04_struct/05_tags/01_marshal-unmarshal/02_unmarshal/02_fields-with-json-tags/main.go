@@ -16,8 +16,8 @@ type Product struct {
 func main() {
 	/*
 		缺少字段:
-			price 缺省 → 赋零值 0.0
-			discount 缺省 → 保持 nil
+			price 缺省 -> 赋零值 0.0
+			discount 缺省 -> 保持 nil
 			omitempty 只影响 序列化，对反序列化没影响
 		多余字段
 			Go 的 json.Unmarshal 是宽容模式

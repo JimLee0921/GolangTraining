@@ -1,5 +1,10 @@
 ## struct tag
 
+Go 结构体字段必须大写开头才能被序列化或参与反序列化。
+
+但 JSON 等通常使用其它命名风格，比如小写+下划线风格：user_name, age, created_at，所以为了控制 JSON 字段名序列化和反序列化，可以使用结构体
+tag
+
 在 Go 中，可以给结构体字段添加一段特殊的字符串：
 
 ```
@@ -86,9 +91,9 @@ type User struct {
 }
 ```
 
-* `json:"name"` → 序列化时字段名改为 `"name"`；
-* `omitempty` → 当字段为空（零值）时跳过；
-* `-` → 忽略该字段。
+* `json:"name"` -> 序列化时字段名改为 `"name"`；
+* `omitempty` -> 当字段为空（零值）时跳过；
+* `-` -> 忽略该字段。
 
 ### 2. 数据库 ORM（例如 GORM）
 
@@ -182,5 +187,4 @@ fmt.Println(f.Tag.Get("xml")) // username
 | form / binding | `form:"username"`                    | 表单字段名映射          |
 | bson (MongoDB) | `bson:"_id,omitempty"`               | 控制 BSON 序列化      |
 | yaml           | `yaml:"config_path"`                 | YAML 映射字段名       |
-
 
