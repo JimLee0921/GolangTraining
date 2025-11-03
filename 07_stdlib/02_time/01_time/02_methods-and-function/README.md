@@ -1,4 +1,6 @@
-# `time.Time` 方法
+# `time.Time`
+
+time.Time 包中和时间等有关的方法和函数
 
 ## 基础方法
 
@@ -109,10 +111,10 @@ Unix 时间戳与时区无关，只是一个绝对时间点。
 
 ### 加法与差值
 
-| 方法签名                                 | 含义                                      |
-|--------------------------------------|-----------------------------------------|
-| `func (t Time) Add(d Duration) Time` | 在 `t` 的基础上增加或减少一个时间段 `d`（可正可负），返回新时间。   |
-| `func (t Time) Sub(u Time) Duration` | 返回 `t - u` 的时间差，结果是 `time.Duration` 类型。 |
+| 方法签名                                 | 含义                                     |
+|--------------------------------------|----------------------------------------|
+| `func (t Time) Add(d Duration) Time` | 在 `t` 的基础上增加或减少一个时间段 `d`（可正可负），返回新时间   |
+| `func (t Time) Sub(u Time) Duration` | 返回 `t - u` 的时间差，结果是 `time.Duration` 类型 |
 
 > Duration 本质上是纳秒数（int64）。 Add() 和 Sub() 并不会改变原来的 t，而是返回新值
 
@@ -138,4 +140,69 @@ Unix 时间戳与时区无关，只是一个绝对时间点。
 > Since() -> 过去了多久
 > Until() -> 还剩多久
 
+## 时区相关
+
+| 方法                                                  | 作用       | 说明                  |
+|-----------------------------------------------------|----------|---------------------|
+| `func LoadLocation(name string) (*Location, error)` | 加载指定时区   | 如 `"Asia/Shanghai"` |
+| `func FixedZone(name string, offset int) *Location` | 创建固定偏移时区 | 例如 `+8` 不考虑 DST     |
+
+## 延时
+
+```
+func Sleep(d Duration)
+```
+
+Sleep 会暂停当前 goroutine 至少 d 的持续时间。d 为负数或零时，Sleep 会立即恢复。
+
+## Month / Weekend
+
+这两个是枚举类型而不是 int
+
+- 可读性强
+- 避免魔法数字
+- 匹配 Date 和 Weekday() 返回类型
+
+### Weekend
+
+`type Weekday`：Weekday 表示一周中的某一天（星期几）
+
+```
+type Weekday int
+
+const (
+	Sunday Weekday = iota // 0
+	Monday                // 1
+	Tuesday               // 2
+	Wednesday             // 3
+	Thursday              // 4
+	Friday                // 5
+	Saturday              // 6
+)
+```
+
+> Sunday 是 0，不是 Monday
+
+### Month
+
+`type Month`：Month 表示一年中的月份
+
+```
+type Month int
+
+const (
+	January Month = 1
+	February
+	March
+	April
+	May
+	June
+	July
+	August
+	September
+	October
+	November
+	December
+)
+```
 
