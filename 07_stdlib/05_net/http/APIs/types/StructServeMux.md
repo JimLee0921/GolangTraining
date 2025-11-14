@@ -126,7 +126,7 @@ func (mux *ServeMux) ServeHTTP(w ResponseWriter, r *Request)
 
 ### Handler
 
-这个方法不会直接处理请求。只是根据 Request.URL.Path 查路由表，返回匹配结果。
+这个方法不会直接处理请求。只是根据 `Request.URL.Path` 查路由表，返回匹配结果。
 
 一般不会直接用，为内部方法。可以在请求被执行前，先知道它最终会匹配到谁。
 
