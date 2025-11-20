@@ -1,0 +1,23 @@
+// 使用 protobuf 进行通信
+syntax = "proto3";
+
+package geecachepb;
+
+option go_package = "./geecachepb";
+
+// 对照接口定义的 /_geecache/<group>/<key_name>/
+message Request{
+  string group = 1;
+  string key = 2;
+}
+
+// 对照响应的 bytes 数组
+message Response{
+  bytes value = 1;
+}
+
+service GroupCache{
+  rpc Get(Request) returns (Response);
+}
+
+// 运行 protoc --go_out=. *.proto 生成 geecache.pb.go
