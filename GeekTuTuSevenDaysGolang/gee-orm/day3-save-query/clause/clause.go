@@ -1,6 +1,8 @@
 package clause
 
-import "strings"
+import (
+	"strings"
+)
 
 /*
 实现结构体 Clause 拼接各个独立的子句

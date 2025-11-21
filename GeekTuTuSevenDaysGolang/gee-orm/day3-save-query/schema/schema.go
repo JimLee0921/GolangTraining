@@ -61,3 +61,22 @@ func Parse(dest any, d dialect.Dialect) *Schema {
 	}
 	return schema
 }
+
+func (schema *Schema) RecordValues(dest any) []any {
+	// 获取目标结构体的反射值
+	// u := &User{"Tom", 20}
+	// reflect.ValueOf(u).Kind()       // ptr
+	// reflect.Indirect(...) → struct  // 解引用得到 User{}
+	destValue := reflect.Indirect(reflect.ValueOf(dest))
+	// 定义输出结果切片
+	var fieldValues []any
+	for _, field := range schema.Fields {
+		// .Interface() 会把 reflect.Value 包装成 interface{}：
+		// string → interface{}("Tom")
+		// int → interface{}(20)
+		// float → interface{}(3.2)
+		// 最终得到 []any{"Tom", 20} 也就是参数列表
+		fieldValues = append(fieldValues, destValue.FieldByName(field.Name).Interface())
+	}
+	return fieldValues
+}
