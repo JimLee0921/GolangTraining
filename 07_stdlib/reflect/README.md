@@ -12,12 +12,15 @@ reflect 是 Go 语言提供的 运行时反射（runtime reflection） 的标准
 - 动态遍历结构体字段：比如 ORM 框架（GORM）就是用 reflect 遍历字段、tag、类型等实现结构体映射到数据库的
 - 调用未知方法：比如可以在运行时调用 obj.MethodByName("Save")() 这样的动态方法
 
-## 学习顺序
+## 主要核心概念
 
-1. 先理解两个核心概念：
-    - Type（类型信息）
-    - Value（值信息）
-2. 学会如何判断类型（Kind）
-3. 学会取值 / 改值（需要指针）
-4. 学会操作 Struct（读取字段、tag）
-5. 学会调用方法（MethodByName）
+Type 问是什么，Value 管干什么
+
+| 对象              | 主要能力                          | 
+|-----------------|-------------------------------|
+| `reflect.Type`  | 查看信息：字段、方法、容器结构、Kind、Size、Tag |
+| `reflect.Value` | 操作值本身：取值、设值、调用方法、遍历容器         |
+
+
+> 获取 Type 的主要入口是 `reflect.TypeOf` 和新版本的 `reflect.TypeFor`
+> 获取 Value 的主要入口是 `reflect.ValueOf`
