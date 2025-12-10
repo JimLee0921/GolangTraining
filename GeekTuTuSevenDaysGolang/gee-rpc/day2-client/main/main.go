@@ -1,13 +1,11 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"geerpc"
-	"geerpc/codec"
 	"log"
 	"net"
-	"time"
+	"sync"
 )
 
 func startServer(addr chan string) {
@@ -22,33 +20,26 @@ func startServer(addr chan string) {
 }
 
 func main() {
-	// 启动服务端
+	log.SetFlags(0)
+	// 使用 channel 创建 addr 可以确保真正等服务端监听好了客户端才开始 Dial 连接
 	addr := make(chan string)
 	go startServer(addr)
-
-	// 1. 启动客户端拨号连接
-	conn, _ := net.Dial("tcp", <-addr)
-	defer func() { _ = conn.Close() }() // 确保连接关闭
-	time.Sleep(time.Second)
-
-	// 2. 发送 options(协议协商)
-	_ = json.NewEncoder(conn).Encode(geerpc.DefaultOption)
-
-	// 3. 基于 conn 创建 GobCodec
-	cc := codec.NewGobCodec(conn)
-
-	// 4. 循环发 5 个请求 + 收 5 个响应
+	// 使用 Dial 创建 client
+	client, _ := geerpc.Dial("tcp", <-addr)
+	defer func() { _ = client.Close() }()
+	// 并发 goroutine
+	var wg sync.WaitGroup
 	for i := 0; i < 5; i++ {
-		// 构造 Header
-		h := &codec.Header{
-			ServiceMethod: "Foo.Sum",
-			Seq:           uint64(i),
-		}
-		// 真正发送请求 Body
-		_ = cc.Write(h, fmt.Sprintf("geerpc req %d", h.Seq))
-		_ = cc.ReadHeader(h)
-		var reply string
-		_ = cc.ReadBody(&reply)
-		log.Println("reply:", reply)
+		wg.Add(1)
+		go func(i int) {
+			defer wg.Done()
+			args := fmt.Sprintf("geerpc req %d", i)
+			var reply string
+			if err := client.Call("Foo.Sum", args, &reply); err != nil {
+				log.Fatal("call Foo.Sum error", err)
+			}
+			log.Println("reply", reply)
+		}(i)
 	}
+	wg.Wait()
 }

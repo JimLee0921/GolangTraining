@@ -1,6 +1,7 @@
 package geerpc
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
@@ -9,6 +10,7 @@ import (
 	"log"
 	"net"
 	"sync"
+	"time"
 )
 
 type Call struct {
@@ -186,22 +188,8 @@ func parseOptions(opts ...*Option) (*Option, error) {
 }
 
 // Dial 连接 RPC 服务，真正对外暴露的创建接口
-func Dial(network, address string, opts ...*Option) (client *Client, err error) {
-	opt, err := parseOptions(opts...)
-	if err != nil {
-		return nil, err
-	}
-	conn, err := net.Dial(network, address)
-	if err != nil {
-		return nil, err
-	}
-	// 确保 conn 关闭
-	defer func() {
-		if client == nil {
-			_ = conn.Close()
-		}
-	}()
-	return NewClient(conn, opt)
+func Dial(network, address string, opts ...*Option) (*Client, error) {
+	return dialTimeout(NewClient, network, address, opts...)
 }
 
 // 实现发送请求相关
@@ -254,12 +242,64 @@ func (client *Client) Go(serviceMethod string, args, reply any, done chan *Call)
 	return call
 }
 
-// Call 是对 Go 同步调用的包装
-func (client *Client) Call(serviceMethod string, args, reply any) error {
-	// 1. 先创建一个容量为 1 的 done channel
-	// 2. 调用 Go(..., done) 发出异步调用
-	// 3. call := <- ... .Done 在这里阻塞等待
-	// 4. 返回 call.Error 给用户
-	call := <-client.Go(serviceMethod, args, reply, make(chan *Call, 1)).Done
-	return call.Error
+// Call 是对 Go 同步调用的包装，加上 context 支持超时处理
+func (client *Client) Call(ctx context.Context, serviceMethod string, args, reply any) error {
+	// 启动异步调用
+	call := client.Go(serviceMethod, args, reply, make(chan *Call, 1))
+	select {
+	// 超时或取消直接移除调用并返回错误信息
+	case <-ctx.Done():
+		client.removeCall(call.Seq)
+		return errors.New("rpc client: call failed:" + ctx.Err().Error())
+	// RPC 调用先完成，receive 会把结果推送到 call.Done 这里进行接收并返回错误信息
+	case call := <-call.Done:
+		return call.Error
+	}
+}
+
+type clientResult struct {
+	client *Client
+	err    error
+}
+
+type newClientFunc func(conn net.Conn, opt *Option) (client *Client, err error)
+
+// dialTimeout 给 Dial 和 NewClient 套一层超时处理
+func dialTimeout(f newClientFunc, network, address string, opts ...*Option) (client *Client, err error) {
+	opt, err := parseOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	// 如果在指定时间内连不上，直接返回 error
+	conn, err := net.DialTimeout(network, address, opt.ConnectTimeout)
+	if err != nil {
+		return nil, err
+	}
+	// 遇到错误关闭连接
+	defer func() {
+		if err != nil {
+			_ = conn.Close()
+		}
+	}()
+	// 在子 goroutine 中执行 NewClient
+	ch := make(chan clientResult)
+	go func() {
+		client, err := f(conn, opt)
+		ch <- clientResult{
+			client: client,
+			err:    err,
+		}
+	}()
+	// 不限制 NewClient 时间，直接返回结果
+	if opt.ConnectTimeout == 0 {
+		result := <-ch
+		return result.client, result.err
+	}
+	// 如果超时 client 返回 nil 并抛出错误
+	select {
+	case <-time.After(opt.ConnectTimeout):
+		return nil, fmt.Errorf("rpc client: connect timeout: expect within %s", opt.ConnectTimeout)
+	case result := <-ch:
+		return result.client, result.err
+	}
 }

@@ -121,7 +121,7 @@ func (client *Client) receive() {
 			err = client.cc.ReadBody(nil)
 		// 情况2: 服务端返回了 Error 字段，说明客户端已经无需读取 Body了，还是传入 nil 把流都干净，然后调用 call.done() 环境在这个 channel 上的用户协程
 		case h.Error != "":
-			call.Error = fmt.Errorf(h.Error)
+			call.Error = fmt.Errorf("rpc client error: %s", err)
 			err = client.cc.ReadBody(nil)
 			call.done()
 		// 情况3: 正常返回，使用用户传入的 reply 指针读取 body
@@ -133,9 +133,9 @@ func (client *Client) receive() {
 			}
 			call.done()
 		}
-		// 总清算，如果for循环推出说明存在 err ，关闭所有连接，处理所有未完成的 call
-		client.terminateCalls(err)
 	}
+	// 总清算，如果for循环推出说明存在 err ，关闭所有连接，处理所有未完成的 call
+	client.terminateCalls(err)
 }
 
 // NewClient 外部使用方法，创建 Client

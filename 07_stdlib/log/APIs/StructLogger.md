@@ -93,7 +93,7 @@ func (l *Logger) SetPrefix(prefix string)
 ```
 
 - `SetPrefix`：用于修改前缀
-- `SetFkags`：用于动态改变输出格式
+- `SetFlags`：用于动态改变输出格式
 - `SetOutPut`：动态改变输出目标，不如某些级别的日志不需要可以使用 `logger.SeOutPut(io.Discard)` 进行舍弃
 
 ### 查询方法 Getter

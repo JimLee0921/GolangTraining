@@ -11,6 +11,7 @@ import (
 	"reflect"
 	"strings"
 	"sync"
+	"time"
 )
 
 // MagicNumber 魔数签名，用来标记这是 GeeRPC 的请求
@@ -20,15 +21,18 @@ const MagicNumber = 0x3bef5c
 // 客户端传来的整体报文结构大概是这样的：| Option(JSON) | Header(用Codec编码) | Body(用Codec编码) | Header2 | Body2 | ... |
 // 在一次连接中只在最开始发一个 Option(JSON 编码)后面可以发很多次 Header + Body 请求
 type Option struct {
-	MagicNumber int        // 客户端要发来的值，如果跟服务端不一样直接拒绝处理
-	CodecType   codec.Type // 告诉服务端使用哪种 Codec 对 Header 和 Body 进行解码编码
+	MagicNumber    int           // 客户端要发来的值，如果跟服务端不一样直接拒绝处理
+	CodecType      codec.Type    // 告诉服务端使用哪种 Codec 对 Header 和 Body 进行解码编码
+	ConnectTimeout time.Duration // 超时处理，0代表不做限制
+	HandleTimeout  time.Duration
 }
 
 // DefaultOption 给客户的 / 示例代码用的默认配置
 // 魔数固定，默认使用 Gob 进行编码解码
 var DefaultOption = &Option{
-	MagicNumber: MagicNumber,
-	CodecType:   codec.GobType,
+	MagicNumber:    MagicNumber,
+	CodecType:      codec.GobType,
+	ConnectTimeout: time.Second + 10,
 }
 
 // Server 目前只是个空 struct 后续塞入服务注册表等字段
@@ -83,14 +87,14 @@ func (server *Server) ServeConn(conn io.ReadWriteCloser) {
 		return
 	}
 	// 具体处理请求剩下的的 Headers+Bodies
-	server.serveCodec(f(conn))
+	server.serveCodec(f(conn), &opt)
 
 }
 
 var invalidRequest = struct{}{}
 
 // serveCodec 请求主循环 + 并发处理
-func (server *Server) serveCodec(cc codec.Codec) {
+func (server *Server) serveCodec(cc codec.Codec, opt *Option) {
 	sending := new(sync.Mutex) // 确保每次响应是完整的
 	wg := new(sync.WaitGroup)  // 等待所有请求处理完再关闭连接
 	// 不断读取 request
@@ -106,7 +110,7 @@ func (server *Server) serveCodec(cc codec.Codec) {
 			continue
 		}
 		wg.Add(1)
-		go server.handleRequest(cc, req, sending, wg)
+		go server.handleRequest(cc, req, sending, wg, opt.HandleTimeout)
 	}
 	wg.Wait()
 	_ = cc.Close()
@@ -161,16 +165,46 @@ func (server *Server) readRequest(cc codec.Codec) (*request, error) {
 }
 
 // handleRequest 处理请求，真正执行 RPC
-func (server *Server) handleRequest(cc codec.Codec, req *request, sending *sync.Mutex, wg *sync.WaitGroup) {
+func (server *Server) handleRequest(cc codec.Codec, req *request, sending *sync.Mutex, wg *sync.WaitGroup, timeout time.Duration) {
 	// 根据实际方法进行调用
 	defer wg.Done()
-	err := req.svc.call(req.mtype, req.argv, req.replyV)
-	if err != nil {
-		req.h.Error = err.Error()
-		server.sendResponse(cc, req.h, invalidRequest, sending)
+	// 这里需要两个 channel 监控两件事，都设为空 struct 零开销
+	// 1. call 是否已经执行完毕(无论成功还是失败)
+	// 2. 响应是否已经写回客户端
+	called := make(chan struct{}) // 已执行完方法（call 已返回）
+	sent := make(chan struct{})   // 已写完响应（sendResponse 完成）
+	// 启动业务执行 goroutine
+	go func() {
+		// 此处可能卡死，比如 SQL 查询慢，死循环，网络依赖停住
+		err := req.svc.call(req.mtype, req.argv, req.replyV)
+		// call 执行完毕
+		called <- struct{}{}
+		// 写回应
+		if err != nil {
+			req.h.Error = err.Error()
+			server.sendResponse(cc, req.h, invalidRequest, sending)
+			sent <- struct{}{}
+			return
+		}
+		server.sendResponse(cc, req.h, req.replyV.Interface(), sending)
+		// 回应发送完毕
+		sent <- struct{}{}
+	}()
+	// 服务器不启用超时
+	if timeout == 0 {
+		<-called
+		<-sent
 		return
 	}
-	server.sendResponse(cc, req.h, req.replyV.Interface(), sending)
+	select {
+	// 1. 超时情况处理
+	case <-time.After(timeout):
+		req.h.Error = fmt.Sprintf("rpc server: request handle timeout: expect within %s", timeout)
+		server.sendResponse(cc, req.h, invalidRequest, sending)
+	// 2.业务执行成功完成(收到 called 方法执行完毕，但是 sendResponse 还没保证写完)
+	case <-called:
+		<-sent
+	}
 
 }
 
