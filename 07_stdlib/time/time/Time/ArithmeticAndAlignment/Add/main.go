@@ -1,0 +1,31 @@
+package main
+
+import (
+	"fmt"
+	"time"
+)
+
+func main() {
+	start := time.Date(2009, 1, 1, 12, 0, 0, 0, time.UTC)
+
+	afterTenSeconds := start.Add(time.Second * 10)
+	afterTenMinutes := start.Add(time.Minute * 10)
+	afterTenHours := start.Add(time.Hour * 10)
+	afterTenDays := start.Add(time.Hour * 24 * 10)
+
+	beforeTenSeconds := start.Add(-time.Second * 10)
+	beforeTenMinutes := start.Add(-time.Minute * 10)
+	beforeTenHours := start.Add(-time.Hour * 10)
+	beforeTenDays := start.Add(-time.Hour * 24 * 10)
+
+	fmt.Printf("start = %v\n", start)
+	fmt.Printf("start.Add(time.Second * 10) = %v\n", afterTenSeconds)
+	fmt.Printf("start.Add(time.Minute * 10) = %v\n", afterTenMinutes)
+	fmt.Printf("start.Add(time.Hour * 10) = %v\n", afterTenHours)
+	fmt.Printf("start.Add(time.Hour * 24 * 10) = %v\n", afterTenDays)
+
+	fmt.Printf("start.Add(-time.Second * 10) = %v\n", beforeTenSeconds)
+	fmt.Printf("start.Add(-time.Minute * 10) = %v\n", beforeTenMinutes)
+	fmt.Printf("start.Add(-time.Hour * 10) = %v\n", beforeTenHours)
+	fmt.Printf("start.Add(-time.Hour * 24 * 10) = %v\n", beforeTenDays)
+}

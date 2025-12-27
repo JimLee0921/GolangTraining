@@ -1,0 +1,1 @@
+标准库文档地址：https://pkg.go.dev/std
